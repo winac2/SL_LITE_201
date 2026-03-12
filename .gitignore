@@ -1,0 +1,8 @@
+/collect_data_from_images.py
+/data
+/dataset
+/preprocess_data.py
+/README.txt
+/requirments.txt
+/train_hand_model.py
+/__pycache__
