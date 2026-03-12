@@ -188,7 +188,7 @@ class HandGestureApp:
                 set_lang("vi")
         else:
             set_lang("en")
-            
+        #change
         self.refresh_ui()
             
     def refresh_ui(self):
