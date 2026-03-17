@@ -42,12 +42,13 @@ TEXT = "#000000"
 BTN_GREEN = "#22c55e"
 BTN_RED = "#ef4444"
 
-HOLD_TIME = 2.0  # seconds
+HOLD_TIME = 0.5  # seconds
+threshold = 0.8
 
 class HandGestureApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("SignMachine")
+        self.root.title(tr("title"))
         self.root.geometry("1000x720")
         self.root.configure(bg=BG)
         
@@ -77,25 +78,35 @@ class HandGestureApp:
         control = Frame(main, bg=CARD, width=260)
         control.pack(side="right", fill="y", padx=10)
 
-        Label(control, text="CONTROLS", bg=CARD, fg=ACCENT,
-              font=("Segoe UI", 16, "bold")).pack(pady=20)
+        self.control_label=Label(control, text=tr("controls"), bg=CARD, fg=ACCENT,
+              font=("Segoe UI", 16, "bold"))
+        self.control_label.pack(pady=20)
 
-        Button(control, text="START CAMERA 📷", bg=BTN_GREEN, fg="white",
-               font=("Segoe UI", 14, "bold"), bd=0,
-               command=self.start_camera).pack(pady=15, ipadx=20, ipady=10)
+        self.control_btn=Button(
+            control, 
+            text=tr("start_camera"), 
+            bg=BTN_GREEN, 
+            fg="white",
+            font=("Segoe UI", 14, "bold"),
+            bd=0,
+            command=self.start_camera)
+        self.control_btn.pack(pady=15, ipadx=20, ipady=10)
 
-        Button(control, text="STOP CAMERA 🚫📷", bg=BTN_RED, fg="white",
+        self.stop_btn=Button(control, text=tr("stop_camera"), bg=BTN_RED, fg="white",
                font=("Segoe UI", 14, "bold"), bd=0,
-               command=self.stop_camera).pack(pady=10, ipadx=22, ipady=10)
+               command=self.stop_camera)
+        self.stop_btn.pack(pady=10, ipadx=22, ipady=10)
         
-        Button(control, text ="SPEAK OUT 🗣️", bg = "#3b82f6", fg = "white",
-               font = ("Segoe UI", 14, "bold"), bd = 0,
-               command = self.speech_out).pack(pady=10, ipadx=22, ipady=10)
+        self.speak_btn=Button(control, text=tr("speak"), bg="#3b82f6", fg="white",
+               font=("Segoe UI", 14, "bold"), bd=0,
+               command=self.speech_out)
+        self.speak_btn.pack(pady=10, ipadx=22, ipady=10)
         
         #languages 
-        Button(control, text="EN/VI", bg="#3b82f6", fg="white",
+        self.lang_btn=Button(control, text="EN/VI", bg="#3b82f6", fg="white",
                font=("Segoe UI", 12, "bold"), bd=0,
-               command=self.switch_lang).pack(pady=10, ipadx=22, ipady=10)
+               command=self.switch_lang)
+        self.lang_btn.pack(pady=10, ipadx=22, ipady=10)
 
         
         self.prediction_label = Label(
@@ -108,7 +119,7 @@ class HandGestureApp:
         
         self.message_label = Label(
             root,
-            text="MESSAGE: ",
+            text=tr("message"),
             bg=BG,
             fg="#031618",
             wraplength=900,
@@ -177,13 +188,13 @@ class HandGestureApp:
 
     def update_message(self):
         self.message_label.config(
-            text="MESSAGE: " + " ".join(self.message_words)
+            text=tr("message") + " ".join(self.message_words)
         )
         
         
     def switch_lang(self):
         from lang.lang_mana import current_lang
-    
+        print(current_lang)
         if current_lang == "en":
                 set_lang("vi")
         else:
@@ -194,10 +205,16 @@ class HandGestureApp:
     def refresh_ui(self):
 
         self.root.title(tr("title"))
+        
+        self.control_label.config(text=tr("controls"))
 
         self.prediction_label.config(text=tr("gesture_none"))
 
         self.update_message()
+        
+        self.control_btn.config(text=tr("start_camera"))
+        self.stop_btn.config(text=tr("stop_camera"))
+        self.speak_btn.config(text=tr("speak"))
 
     
     def process_frame(self):
@@ -236,7 +253,7 @@ class HandGestureApp:
 
                     try:
                         prob = model.predict_proba(np.array(data_aux).reshape(1, -1))
-                        if max(prob[0]) > 0.8:
+                        if max(prob[0]) > threshold:
                             prediction = LABELS[np.argmax(prob)]
                     except:
                         prediction = None
@@ -254,6 +271,8 @@ class HandGestureApp:
                     if now - self.gesture_start_time >= HOLD_TIME:
             # chỉ append khi prediction chắc chắn là string
                         self.message_words.append(prediction.upper())
+                        # print(f"Added '{prediction.upper()}' to {self.message_words},")#1
+                        print(self.message_words)
                         self.update_message()
                         self.gesture_committed = True
             else:
@@ -263,6 +282,7 @@ class HandGestureApp:
 
             display_text = prediction.upper() if prediction else "NONE"
             self.prediction_label.config(text=f"GESTURE: {display_text}")
+            # print(display_text)
 
             img = ImageTk.PhotoImage(Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)))
             self.video_label.imgtk = img

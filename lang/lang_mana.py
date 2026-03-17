@@ -5,7 +5,7 @@ LANG = {
     "vi": VI.TEXT
 }
 
-current_lang = "en"
+current_lang = "vi"
 
 def set_lang(lang):
     global current_lang
