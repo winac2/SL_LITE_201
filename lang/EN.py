@@ -11,5 +11,12 @@ TEXT = {
     "is": "is",
     "khoi": "khoi",
     "my": "my",
-    "name": "name"
+    "name": "name",
+    
+    "drink": "drink ?",
+    "iced": "iced",
+    "hot": "hot",
+    "thanks": "thanks",
+    
+    "f":"f"
 }

@@ -12,5 +12,12 @@ TEXT = {
     "is": "là",
     "khoi": "khôi",
     "my": "tôi",
-    "name": "tên"
+    "name": "tên",
+    
+    "drink": "bạn muốn uống gì ?",
+    "iced": "hay đá",
+    "hot": "nóng",
+    "thanks": "cảm ơn",
+    
+    "f":"f"
 }

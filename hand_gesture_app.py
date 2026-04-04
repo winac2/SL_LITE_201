@@ -13,16 +13,21 @@ import pyttsx3 #2.91
 
 
 
-MODEL_PATH = './models/hand_gesture_model_g1.pkl'
+MODEL_PATH = './models/hand_gesture_model_main_DrHeHoIcTh.pkl'
 model = pickle.load(open(MODEL_PATH, 'rb'))
 
 # LABELS = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'hello', 6: 'is', 7: 'khoi', 8: 'my' , 9: 'name'} #0
 LABELS = {
-    0: 'Xin chào',
-    1: 'is',
-    2: 'khoi',
-    3: 'my',
-    4: 'name'
+    # 0: 'hello',
+    # 1: 'is',
+    # 2: 'khoi',
+    # 3: 'my',
+    # 4: 'name'
+    0: 'drink',
+    1: 'hello',
+    2: 'hot',
+    3: 'iced',
+    4: 'thanks'
     } #g1
 # LABELS = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E'} #ABCDE
 # g1: hello is khoi my name
@@ -42,7 +47,7 @@ TEXT = "#000000"
 BTN_GREEN = "#22c55e"
 BTN_RED = "#ef4444"
 
-HOLD_TIME = 0.5  # seconds
+HOLD_TIME = 0.75  # seconds
 threshold = 0.8
 
 class HandGestureApp:
@@ -187,11 +192,11 @@ class HandGestureApp:
         self.video_label.config(image=imgtk)
 
     def update_message(self):
+        translated_words = [tr(word) for word in self.message_words]
         self.message_label.config(
-            text=tr("message") + " ".join(self.message_words)
+            text=tr("message") + " " + " ".join(translated_words)
         )
-        
-        
+
     def switch_lang(self):
         from lang.lang_mana import current_lang
         print(current_lang)
@@ -270,7 +275,7 @@ class HandGestureApp:
                 if self.gesture_start_time and not self.gesture_committed:
                     if now - self.gesture_start_time >= HOLD_TIME:
             # chỉ append khi prediction chắc chắn là string
-                        self.message_words.append(prediction.upper())
+                        self.message_words.append(prediction) #self.message_words.append(prediction.upper())
                         # print(f"Added '{prediction.upper()}' to {self.message_words},")#1
                         print(self.message_words)
                         self.update_message()
