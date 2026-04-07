@@ -56,6 +56,7 @@ class HandGestureApp:
         self.root.title(tr("title"))
         self.root.geometry("1000x720")
         self.root.configure(bg=BG)
+        self.root.iconbitmap("./assets/logo.ico")
         
         self.width = 640
         self.height = 480
