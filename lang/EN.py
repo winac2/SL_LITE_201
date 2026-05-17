@@ -18,5 +18,11 @@ TEXT = {
     "hot": "hot",
     "thanks": "thanks",
     
+    "A" : "A",
+    "B" : "B",
+    "C" : "C",
+    "D" : "D",
+    "E" : "E",
+    
     "f":"f"
 }
