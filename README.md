@@ -1,4 +1,5 @@
-***moved to new repo
+##moved to new repo
+---
 
-
-https://github.com/winac2/signlang_test
+##https://github.com/winac2/signlang_test
+---
